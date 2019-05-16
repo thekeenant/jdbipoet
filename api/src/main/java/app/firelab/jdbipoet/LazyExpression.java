@@ -39,6 +39,46 @@ public interface LazyExpression<E extends Expression> {
     return writeStatement(SqlContext.empty());
   }
 
+  LazyExpression<?> join(JoinType joinType, LazyExpression<?> expr);
+
+  LazyExpression<?> join(JoinType joinType, LazyExpression<?> expr, LazyExpression<?> on);
+
+  default LazyExpression<?> innerJoin(LazyExpression<?> expr) {
+    return join(JoinType.INNER, expr);
+  }
+
+  default LazyExpression<?> innerJoin(LazyExpression<?> expr, LazyExpression<?> on) {
+    return join(JoinType.INNER, expr, on);
+  }
+
+  default LazyExpression<?> leftOuterJoin(LazyExpression<?> expr) {
+    return join(JoinType.LEFT_OUTER, expr);
+  }
+
+  default LazyExpression<?> leftOuterJoin(LazyExpression<?> expr, LazyExpression<?> on) {
+    return join(JoinType.LEFT_OUTER, expr, on);
+  }
+
+  default LazyExpression<?> rightOuterJoin(LazyExpression<?> expr) {
+    return join(JoinType.RIGHT_OUTER, expr);
+  }
+
+  default LazyExpression<?> rightOuterJoin(LazyExpression<?> expr, LazyExpression<?> on) {
+    return join(JoinType.RIGHT_OUTER, expr, on);
+  }
+
+  default LazyExpression<?> fullOuterJoin(LazyExpression<?> expr) {
+    return join(JoinType.FULL_OUTER, expr);
+  }
+
+  default LazyExpression<?> fullOuterJoin(LazyExpression<?> expr, LazyExpression<?> on) {
+    return join(JoinType.FULL_OUTER, expr, on);
+  }
+
+  default LazyExpression<?> crossJoin(LazyExpression<?> expr) {
+    return join(JoinType.CROSS, expr);
+  }
+
   /**
    * @return separates this expression and {@param nested} with a dot, "."
    */

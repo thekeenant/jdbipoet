@@ -1,13 +1,34 @@
 package app.firelab.jdbipoet.base;
 
 import app.firelab.jdbipoet.Expression;
+import app.firelab.jdbipoet.JoinType;
 import app.firelab.jdbipoet.LazyExpression;
+import app.firelab.jdbipoet.SqlContext;
 import app.firelab.jdbipoet.base.BinaryExpression.Comparator;
 
 interface BaseLazyExpression<E extends Expression> extends LazyExpression<E> {
+  @Override
+  default LazyExpression<?> join(JoinType joinType, LazyExpression<?> expr) {
+    return (BaseExpression) context -> BaseSqlPart.builder(context)
+        .append(this)
+        .append(' ')
+        .append(joinType.name().replace('_', ' '))
+        .append(" JOIN ")
+        .append(expr)
+        .build();
+  }
 
-  static <E extends Expression> BaseLazyExpression<E> of(E expression) {
-    return context -> expression;
+  @Override
+  default LazyExpression<?> join(JoinType joinType, LazyExpression<?> expr, LazyExpression<?> on) {
+    return (BaseExpression) context -> BaseSqlPart.builder(context)
+        .append(this)
+        .append(' ')
+        .append(joinType.name().replace('_', ' '))
+        .append(" JOIN ")
+        .append(expr)
+        .append(" ON ")
+        .append(on)
+        .build();
   }
 
   @Override

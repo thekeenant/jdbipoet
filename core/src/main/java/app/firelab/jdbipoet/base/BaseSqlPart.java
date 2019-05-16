@@ -1,5 +1,7 @@
 package app.firelab.jdbipoet.base;
 
+import static com.sun.tools.doclint.Entity.part;
+
 import app.firelab.jdbipoet.LazyExpression;
 import app.firelab.jdbipoet.SqlContext;
 import app.firelab.jdbipoet.SqlPart;
@@ -92,15 +94,15 @@ class BaseSqlPart implements SqlPart {
     }
 
     public <T> BasicBuilder append(String sql, Collection<T> bindings) {
+      if (sql == null) throw new NullPointerException();
+      if (bindings == null) throw new NullPointerException();
       this.sql.append(sql);
       this.bindings.addAll(bindings);
       return this;
     }
 
     public <T> BasicBuilder append(String sql, T binding) {
-      this.sql.append(sql);
-      this.bindings.add(binding);
-      return this;
+      return append(sql, Collections.singletonList(binding));
     }
 
     public BasicBuilder append(char character) {

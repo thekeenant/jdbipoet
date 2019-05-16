@@ -37,6 +37,13 @@ public interface InsertStatementBuilderStep1 extends InsertStatementBuilderStep2
   interface RowModifier extends Function<SettableRow, SettableRow> {
     @Override
     SettableRow apply(SettableRow row);
+
+    default RowModifier then(RowModifier next) {
+      return row -> {
+        apply(row);
+        return next.apply(row);
+      };
+    }
   }
 
   @FunctionalInterface
@@ -46,6 +53,7 @@ public interface InsertStatementBuilderStep1 extends InsertStatementBuilderStep2
   }
 
   interface SettableRow {
+    @CheckReturnValue
     SettableRow set(String column, LazyExpression<?> value);
 
     @CheckReturnValue
@@ -53,10 +61,12 @@ public interface InsertStatementBuilderStep1 extends InsertStatementBuilderStep2
 
     Map<String, LazyExpression<?>> values();
 
+    @CheckReturnValue
     default SettableRow set(FieldName column, LazyExpression<?> value) {
       return set(column.asString(), value);
     }
 
+    @CheckReturnValue
     default SettableRow set(ColumnReference column, LazyExpression<?> value) {
       return set(column.name(), value);
     }
@@ -69,8 +79,9 @@ public interface InsertStatementBuilderStep1 extends InsertStatementBuilderStep2
       return new SettableRow() {
         @Override
         public SettableRow set(String column, LazyExpression<?> value) {
-          values.put(column, value);
-          return this;
+          SettableRow copy = copy();
+          copy.values().put(column, value);
+          return copy;
         }
 
         @Override
