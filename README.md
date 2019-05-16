@@ -1,6 +1,10 @@
 # jdbipoet
 
-`Write SQL statements fluently!`
+**Write SQL statements fluently!**
+
+* [Maven/Gradle Dependency](https://jitpack.io/#thekeenant/jdbipoet)
+
+
 
 Writing SQL statements:
 
