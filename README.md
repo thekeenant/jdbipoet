@@ -43,7 +43,7 @@ public class JdbiExample {
       return adam.get(table -> table.name);
     });
 
-    assertThat(name).isEqualTo(name);
+    assertThat(name).isEqualTo("Adam");
   }
 
   @Test
