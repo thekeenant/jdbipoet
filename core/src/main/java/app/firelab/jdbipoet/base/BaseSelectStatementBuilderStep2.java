@@ -17,8 +17,8 @@ class BaseSelectStatementBuilderStep2 implements SelectStatementBuilderStep2, Ba
 
   BaseSelectStatementBuilderStep2(LazyExpression<?> what, LazyExpression<?> from) {
     this.builder = BaseSelectStatement.builder(what, from);
-
   }
+
   @Override
   public SelectStatement build() {
     return builder.build();

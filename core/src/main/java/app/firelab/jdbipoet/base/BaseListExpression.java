@@ -29,7 +29,7 @@ class BaseListExpression<T extends LazyExpression<?>> implements ListExpression<
       builder.append(current);
 
       if (i != items.size() - 1) {
-        builder.append(',');
+        builder.append(", ");
       }
     }
 

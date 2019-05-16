@@ -3,7 +3,7 @@ package app.firelab.jdbipoet;
 import java.util.List;
 import org.jdbi.v3.core.Handle;
 
-public interface Table<H extends TableHandle<?>> {
+public interface Table<H extends TableHandle<?>> extends TableReference {
   List<Column<?>> columns();
 
   H wrapHandle(Handle raw);
