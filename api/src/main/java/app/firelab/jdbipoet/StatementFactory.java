@@ -6,13 +6,13 @@ import javax.annotation.CheckReturnValue;
 
 @CheckReturnValue
 public interface StatementFactory {
-  <E extends LazyExpression<?>> InsertStatementBuilderStep1 insertInto(LazyExpression<?> table);
+  InsertStatementBuilderStep1 insertInto(LazyExpression<?> table);
 
-  default SelectStatement select(String raw, Object... bindings) {
-    return select(raw, Arrays.asList(bindings));
+  default Statement statement(String raw, Object... bindings) {
+    return statement(raw, Arrays.asList(bindings));
   }
 
-  SelectStatement select(String raw, List<Object> bindings);
+  Statement statement(String raw, List<Object> bindings);
 
   /**
    * Starts building a select statement, selecting all fields, "*".

@@ -1,13 +1,13 @@
 package app.firelab.jdbipoet.base;
 
-import app.firelab.jdbipoet.SelectStatement;
 import app.firelab.jdbipoet.SqlContext;
 import app.firelab.jdbipoet.SqlStatement;
+import app.firelab.jdbipoet.Statement;
 
-public class RawSelectStatement implements SelectStatement, BaseExpression {
+class RawStatement implements Statement, BaseExpression {
   private final Raw raw;
 
-  public RawSelectStatement(Raw raw) {
+  RawStatement(Raw raw) {
     this.raw = raw;
   }
 

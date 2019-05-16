@@ -1,6 +1,5 @@
 package app.firelab.jdbipoet.base;
 
-import app.firelab.jdbipoet.AbstractTable;
 import app.firelab.jdbipoet.Column;
 import app.firelab.jdbipoet.DatabaseName;
 import app.firelab.jdbipoet.FullyQualifiedTableReference;
@@ -19,12 +18,12 @@ public abstract class SemiQualifiedTable<H extends TableHandle<?>> extends Abstr
     this.reference = reference;
   }
 
-  public <T> Column<T> column(Class<T> type, String name) {
-    return super.column(type, Sql.expressions().columnRef(this, name));
+  public <T> Column<T> registerColumn(Class<T> type, String name) {
+    return super.registerColumn(type, Sql.expressions().columnRef(this, name));
   }
 
-  public <T> NullableColumn<T> nullableColumn(Class<T> type, String name) {
-    return super.nullableColumn(type, Sql.expressions().columnRef(this, name));
+  public <T> NullableColumn<T> registerNullableColumn(Class<T> type, String name) {
+    return super.registerNullableColumn(type, Sql.expressions().columnRef(this, name));
   }
 
   @Override

@@ -1,5 +1,8 @@
-package app.firelab.jdbipoet;
+package app.firelab.jdbipoet.base;
 
+import app.firelab.jdbipoet.Column;
+import app.firelab.jdbipoet.Table;
+import app.firelab.jdbipoet.TableRow;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -7,40 +10,30 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.jdbi.v3.core.statement.StatementContext;
 
-public class TableRow<T extends Table<?>> {
+public class BaseTableRow<T extends Table<?>> implements TableRow<T> {
   private final T table;
-  private final Map<Column<?>, Object> values;
+  private final Map<Column<?>, ?> values;
 
-  private TableRow(T table, Map<Column<?>, Object> values) {
+  private BaseTableRow(T table, Map<Column<?>, ?> values) {
     this.table = table;
     this.values = values;
   }
 
+  @Override
   public T table() {
     return table;
   }
 
-  public Map<Column<?>, Object> toMap() {
+  @Override
+  public Map<Column<?>, ?> toMap() {
     return new HashMap<>(values);
   }
 
-  public Map<String, Object> toStringMap() {
-    return values.keySet().stream()
-        .collect(Collectors.toMap(
-            column -> column.name().asString(),
-            values::get,
-            (u, v) -> {
-              throw new IllegalStateException();
-            },
-            LinkedHashMap::new
-        ));
-  }
-
   @SuppressWarnings("unchecked")
+  @Override
   public <V> V get(Column<V> column) {
     if (!values.containsKey(column)) {
       throw new IllegalArgumentException("Column not found in row: " + values);
@@ -48,11 +41,7 @@ public class TableRow<T extends Table<?>> {
     return (V) values.get(column);
   }
 
-  public <C extends Column<V>, V> V get(Function<T, C> columnProvider) {
-    return get(columnProvider.apply(table));
-  }
-
-  static <T extends Table<?>> TableRow<T> fromResultSet(T table, ResultSet resultSet, StatementContext ctx) throws SQLException {
+  static <T extends Table<?>> BaseTableRow<T> fromResultSet(T table, ResultSet resultSet, StatementContext ctx) throws SQLException {
     Map<Column<?>, Object> values = new LinkedHashMap<>();
     Map<String, Column<?>> columnsByName = table.columns().stream()
         .collect(Collectors.toMap(
@@ -80,6 +69,6 @@ public class TableRow<T extends Table<?>> {
       throw new IllegalArgumentException("Columns not returned in ResultSet: " + missingColumns);
     }
 
-    return new TableRow<>(table, values);
+    return new BaseTableRow<>(table, values);
   }
 }

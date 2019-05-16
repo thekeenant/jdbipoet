@@ -1,5 +1,6 @@
 package app.firelab.jdbipoet.base;
 
+import app.firelab.jdbipoet.Column;
 import app.firelab.jdbipoet.ColumnReference;
 import app.firelab.jdbipoet.DatabaseName;
 import app.firelab.jdbipoet.ExpressionFactory;
@@ -7,6 +8,7 @@ import app.firelab.jdbipoet.FieldName;
 import app.firelab.jdbipoet.FullyQualifiedTableReference;
 import app.firelab.jdbipoet.LazyExpression;
 import app.firelab.jdbipoet.ListExpression;
+import app.firelab.jdbipoet.NullableColumn;
 import app.firelab.jdbipoet.QualifiedColumnReference;
 import app.firelab.jdbipoet.SchemaName;
 import app.firelab.jdbipoet.SemiQualifiedTableReference;
@@ -18,6 +20,16 @@ class BaseExpressionFactory implements ExpressionFactory {
   private static final LazyExpression<?> NULL = Raw.of("NULL");
   private static final LazyExpression<?> EXCLUDED = Raw.of("EXCLUDED");
   private static final LazyExpression<?> WILDCARD = Raw.of("*");
+
+  @Override
+  public <T> Column<T> column(Class<T> type, QualifiedColumnReference reference) {
+    return new BaseColumn<>(type, reference);
+  }
+
+  @Override
+  public <T> NullableColumn<T> nullableColumn(Class<T> type, QualifiedColumnReference reference) {
+    return new BaseNullableColumn<>(type, reference);
+  }
 
   @Override
   public LazyExpression<?> nullValue() {

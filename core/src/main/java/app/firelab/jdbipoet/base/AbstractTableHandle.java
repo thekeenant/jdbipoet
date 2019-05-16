@@ -1,5 +1,7 @@
-package app.firelab.jdbipoet;
+package app.firelab.jdbipoet.base;
 
+import app.firelab.jdbipoet.Table;
+import app.firelab.jdbipoet.TableHandle;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.jdbi.v3.core.Handle;
@@ -29,7 +31,7 @@ public abstract class AbstractTableHandle<T extends Table<?>> implements TableHa
   }
 
   @Override
-  public TableRow<T> map(ResultSet rs, StatementContext ctx) throws SQLException {
+  public BaseTableRow<T> map(ResultSet rs, StatementContext ctx) throws SQLException {
     return rowMapper.map(rs, ctx);
   }
 }

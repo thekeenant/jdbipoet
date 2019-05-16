@@ -9,6 +9,24 @@ import net.bytebuddy.dynamic.TypeResolutionStrategy.Lazy;
 @CheckReturnValue
 public interface ExpressionFactory {
   /**
+   * Creates a column from a column reference.
+   * @param type the type of the column
+   * @param reference the column reference
+   * @param <T> the type of the column
+   * @return the column
+   */
+  <T> Column<T> column(Class<T> type, QualifiedColumnReference reference);
+
+  /**
+   * Creates a nullable column from a column reference.
+   * @param type the type of the column
+   * @param reference the column reference
+   * @param <T> the type of the column
+   * @return the column
+   */
+  <T> NullableColumn<T> nullableColumn(Class<T> type, QualifiedColumnReference reference);
+
+  /**
    * Wraps an expression with parentheses.
    * @param expr the expression to wrap
    * @return the new parenthesized expression

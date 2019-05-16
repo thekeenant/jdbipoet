@@ -1,5 +1,6 @@
 package app.firelab.jdbipoet.base;
 
+import app.firelab.jdbipoet.Column;
 import app.firelab.jdbipoet.ColumnReference;
 import app.firelab.jdbipoet.DatabaseName;
 import app.firelab.jdbipoet.ExpressionFactory;
@@ -7,6 +8,7 @@ import app.firelab.jdbipoet.FieldName;
 import app.firelab.jdbipoet.FullyQualifiedTableReference;
 import app.firelab.jdbipoet.LazyExpression;
 import app.firelab.jdbipoet.ListExpression;
+import app.firelab.jdbipoet.NullableColumn;
 import app.firelab.jdbipoet.QualifiedColumnReference;
 import app.firelab.jdbipoet.SchemaName;
 import app.firelab.jdbipoet.SemiQualifiedTableReference;
@@ -15,6 +17,16 @@ import app.firelab.jdbipoet.TableReference;
 import java.util.List;
 
 public interface ExpressionFactoryMixin extends ExpressionFactory {
+  @Override
+  default <T> Column<T> column(Class<T> type, QualifiedColumnReference reference) {
+    return Sql.expressions().column(type, reference);
+  }
+
+  @Override
+  default <T> NullableColumn<T> nullableColumn(Class<T> type, QualifiedColumnReference reference) {
+    return Sql.expressions().nullableColumn(type, reference);
+  }
+
   @Override
   default LazyExpression<?> nullValue() {
     return Sql.expressions().nullValue();

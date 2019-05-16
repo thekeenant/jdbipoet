@@ -1,6 +1,5 @@
 package app.firelab.jdbipoet.base;
 
-import app.firelab.jdbipoet.AbstractTable;
 import app.firelab.jdbipoet.Column;
 import app.firelab.jdbipoet.NullableColumn;
 import app.firelab.jdbipoet.SchemaName;
@@ -22,12 +21,12 @@ public abstract class UnqualifiedTable<H extends TableHandle<?>> extends Abstrac
     this(Sql.expressions().tableName(name));
   }
 
-  public <T> Column<T> column(Class<T> type, String name) {
-    return super.column(type, Sql.expressions().columnRef(this, name));
+  public <T> Column<T> registerColumn(Class<T> type, String name) {
+    return super.registerColumn(type, Sql.expressions().columnRef(this, name));
   }
 
-  public <T> NullableColumn<T> nullableColumn(Class<T> type, String name) {
-    return super.nullableColumn(type, Sql.expressions().columnRef(this, name));
+  public <T> NullableColumn<T> registerNullableColumn(Class<T> type, String name) {
+    return super.registerNullableColumn(type, Sql.expressions().columnRef(this, name));
   }
 
   @Override
