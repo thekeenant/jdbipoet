@@ -29,6 +29,39 @@ Mapping to JDBI:
 
 ```java
 public class JdbiExample {
+  @Test
+  public void findAdam() {
+    Jdbi jdbi = null;
+
+    String name = jdbi.withHandle(handle -> {
+      UsersTable users = new UsersTable();
+
+      TableRow<UsersTable> adam = users.wrapHandle(handle)
+          .findByName("Adam")
+          .orElse(null);
+
+      return adam.get(table -> table.name);
+    });
+
+    assertThat(name).isEqualTo(name);
+  }
+
+  @Test
+  public void findSeniors() {
+    Jdbi jdbi = null;
+
+    List<TableRow<UsersTable>> seniors = jdbi.withHandle(handle -> {
+      UsersTable users = new UsersTable();
+
+      return users.wrapHandle(handle)
+          .findOlderThan(65)
+          .list();
+    });
+
+    assertThat(seniors).extracting(row -> row.get(table -> table.age)).allMatch(i -> i >= 65);
+  }
+  
+  // The table & handle belong in separate classes...
 
   private static class UsersTable extends UnqualifiedTable<UsersHandle> {
     private final Column<Integer> id = registerColumn(Integer.class, "id");
@@ -68,38 +101,6 @@ public class JdbiExample {
           .toQuery(this)
           .map(this);
     }
-  }
-
-  @Test
-  public void findAdam() {
-    Jdbi jdbi = null;
-
-    String name = jdbi.withHandle(handle -> {
-      UsersTable users = new UsersTable();
-
-      TableRow<UsersTable> adam = users.wrapHandle(handle)
-          .findByName("Adam")
-          .orElse(null);
-
-      return adam.get(table -> table.name);
-    });
-
-    assertThat(name).isEqualTo(name);
-  }
-
-  @Test
-  public void findSeniors() {
-    Jdbi jdbi = null;
-
-    List<TableRow<UsersTable>> seniors = jdbi.withHandle(handle -> {
-      UsersTable users = new UsersTable();
-
-      return users.wrapHandle(handle)
-          .findOlderThan(65)
-          .list();
-    });
-
-    assertThat(seniors).extracting(row -> row.get(table -> table.age)).allMatch(i -> i >= 65);
   }
 }
 ```
