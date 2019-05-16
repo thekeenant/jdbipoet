@@ -38,11 +38,8 @@ public interface InsertStatementBuilderStep1 extends InsertStatementBuilderStep2
     @Override
     SettableRow apply(SettableRow row);
 
-    default RowModifier then(RowModifier next) {
-      return row -> {
-        apply(row);
-        return next.apply(row);
-      };
+    default RowModifier andThen(RowModifier after) {
+      return row -> after.apply(apply(row));
     }
   }
 
